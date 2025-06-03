@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,10 +8,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { VideoAnalysis } from "@/components/VideoAnalysis";
 import { ProductDetection } from "@/components/ProductDetection";
 import { AnalysisReport } from "@/components/AnalysisReport";
-import { Upload, Play, Search, BarChart3, Clock, Eye } from "lucide-react";
+import { Upload, Play, Search, BarChart3, Clock, Eye, LogOut } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 
 const Index = () => {
+  const { user, logout } = useAuth();
   const [videoUrl, setVideoUrl] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
@@ -100,11 +101,22 @@ const Index = () => {
                 <p className="text-sm text-gray-600">Detección inteligente de productos en videos</p>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-4">
               <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
                 <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
                 Google AI Conectado
               </Badge>
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-600">Bienvenido, {user}</span>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={logout}
+                  className="text-gray-600 hover:text-red-600"
+                >
+                  <LogOut className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </div>
         </div>
