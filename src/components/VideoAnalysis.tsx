@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ProductManager } from "@/components/ProductManager";
-import { Settings, Zap, Shield, Brain, ChevronDown, ChevronUp } from "lucide-react";
+import { Settings, Zap, Shield, Brain, ChevronDown, ChevronUp, Sparkles } from "lucide-react";
 
 interface Product {
   id: string;
@@ -18,9 +18,9 @@ export const VideoAnalysis = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [analysisSettings, setAnalysisSettings] = useState({
-    frameRate: 1, // frames por segundo a analizar
-    sensitivity: "medium", // low, medium, high
-    skipSimilar: true, // evitar detecciones duplicadas consecutivas
+    frameRate: 1,
+    sensitivity: "medium",
+    skipSimilar: true,
   });
 
   const handleProductsChange = (newProducts: Product[]) => {
@@ -30,45 +30,55 @@ export const VideoAnalysis = () => {
   const activeProducts = products.filter(p => p.isActive);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <ProductManager onProductsChange={handleProductsChange} />
       
-      <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2 text-blue-700">
-            <Brain className="h-5 w-5" />
+      <Card className="flockit-gradient shadow-2xl border-blue-900/20 rounded-3xl card-hover">
+        <CardHeader className="pb-6">
+          <CardTitle className="flex items-center space-x-3 text-white text-xl">
+            <div className="w-8 h-8 flockit-orange-gradient rounded-lg flex items-center justify-center">
+              <Brain className="h-5 w-5 text-white" />
+            </div>
             <span>Configuración de Análisis</span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <h4 className="font-medium text-gray-700">Productos a Detectar ({activeProducts.length})</h4>
+        <CardContent className="space-y-6">
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-3">
+              <h4 className="font-semibold text-blue-100 flex items-center space-x-2">
+                <Sparkles className="h-4 w-4 text-accent" />
+                <span>Productos a Detectar ({activeProducts.length})</span>
+              </h4>
               {activeProducts.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
                   {activeProducts.map((product) => (
-                    <Badge key={product.id} variant="secondary" className="bg-blue-100 text-blue-700">
+                    <Badge key={product.id} variant="secondary" className="bg-white/20 text-white border-white/30 backdrop-blur-sm rounded-xl px-3 py-2">
                       <img 
                         src={product.image} 
                         alt={product.name}
-                        className="w-4 h-4 rounded mr-1"
+                        className="w-4 h-4 rounded mr-2 object-cover"
                       />
                       {product.name}
                     </Badge>
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-gray-500">No hay productos activos. Agrega productos para comenzar.</p>
+                <div className="p-4 bg-white/10 rounded-xl border border-white/20 backdrop-blur-sm">
+                  <p className="text-sm text-blue-100">No hay productos activos. Agrega productos para comenzar el análisis.</p>
+                </div>
               )}
             </div>
-            <div className="space-y-2">
-              <h4 className="font-medium text-gray-700">Configuraciones</h4>
+            <div className="space-y-3">
+              <h4 className="font-semibold text-blue-100 flex items-center space-x-2">
+                <Settings className="h-4 w-4 text-accent" />
+                <span>Configuraciones Activas</span>
+              </h4>
               <div className="flex flex-wrap gap-2">
-                <Badge variant="outline" className="border-green-200 text-green-700">
+                <Badge variant="outline" className="bg-green-500/20 text-green-100 border-green-400/30 rounded-xl">
                   <Zap className="h-3 w-3 mr-1" />
                   Análisis {analysisSettings.sensitivity === "high" ? "profundo" : analysisSettings.sensitivity === "medium" ? "balanceado" : "rápido"}
                 </Badge>
-                <Badge variant="outline" className="border-blue-200 text-blue-700">
+                <Badge variant="outline" className="bg-blue-500/20 text-blue-100 border-blue-400/30 rounded-xl">
                   <Shield className="h-3 w-3 mr-1" />
                   {analysisSettings.frameRate} FPS
                 </Badge>
@@ -77,54 +87,54 @@ export const VideoAnalysis = () => {
           </div>
 
           {/* Configuraciones avanzadas */}
-          <div className="border-t pt-4">
+          <div className="border-t border-white/20 pt-6">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setShowAdvanced(!showAdvanced)}
-              className="mb-3"
+              className="mb-4 text-blue-100 hover:text-white hover:bg-white/10 rounded-xl"
             >
-              {showAdvanced ? <ChevronUp className="h-4 w-4 mr-1" /> : <ChevronDown className="h-4 w-4 mr-1" />}
+              {showAdvanced ? <ChevronUp className="h-4 w-4 mr-2" /> : <ChevronDown className="h-4 w-4 mr-2" />}
               Configuraciones Avanzadas
             </Button>
 
             {showAdvanced && (
-              <div className="grid md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Frecuencia de análisis</label>
+              <div className="grid md:grid-cols-3 gap-6 p-6 bg-white/10 rounded-2xl border border-white/20 backdrop-blur-sm">
+                <div className="space-y-3">
+                  <label className="text-sm font-semibold text-blue-100">Frecuencia de análisis</label>
                   <select
                     value={analysisSettings.frameRate}
                     onChange={(e) => setAnalysisSettings(prev => ({...prev, frameRate: parseInt(e.target.value)}))}
-                    className="w-full p-2 border border-gray-300 rounded-md text-sm"
+                    className="w-full p-3 border border-white/30 rounded-xl text-sm bg-white/20 text-white placeholder-blue-200 backdrop-blur-sm focus:border-accent focus:ring-1 focus:ring-accent"
                   >
-                    <option value={0.5}>0.5 FPS (Muy rápido)</option>
-                    <option value={1}>1 FPS (Rápido)</option>
-                    <option value={2}>2 FPS (Balanceado)</option>
-                    <option value={4}>4 FPS (Detallado)</option>
+                    <option value={0.5} className="text-slate-800">0.5 FPS (Muy rápido)</option>
+                    <option value={1} className="text-slate-800">1 FPS (Rápido)</option>
+                    <option value={2} className="text-slate-800">2 FPS (Balanceado)</option>
+                    <option value={4} className="text-slate-800">4 FPS (Detallado)</option>
                   </select>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Sensibilidad</label>
+                <div className="space-y-3">
+                  <label className="text-sm font-semibold text-blue-100">Sensibilidad</label>
                   <select
                     value={analysisSettings.sensitivity}
                     onChange={(e) => setAnalysisSettings(prev => ({...prev, sensitivity: e.target.value}))}
-                    className="w-full p-2 border border-gray-300 rounded-md text-sm"
+                    className="w-full p-3 border border-white/30 rounded-xl text-sm bg-white/20 text-white placeholder-blue-200 backdrop-blur-sm focus:border-accent focus:ring-1 focus:ring-accent"
                   >
-                    <option value="low">Baja (Más rápido)</option>
-                    <option value="medium">Media (Balanceado)</option>
-                    <option value="high">Alta (Más preciso)</option>
+                    <option value="low" className="text-slate-800">Baja (Más rápido)</option>
+                    <option value="medium" className="text-slate-800">Media (Balanceado)</option>
+                    <option value="high" className="text-slate-800">Alta (Más preciso)</option>
                   </select>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Filtros</label>
-                  <label className="flex items-center space-x-2 text-sm">
+                <div className="space-y-3">
+                  <label className="text-sm font-semibold text-blue-100">Filtros</label>
+                  <label className="flex items-center space-x-3 text-sm text-blue-100 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={analysisSettings.skipSimilar}
                       onChange={(e) => setAnalysisSettings(prev => ({...prev, skipSimilar: e.target.checked}))}
-                      className="rounded"
+                      className="rounded-md border-white/30 bg-white/20 text-accent focus:ring-accent focus:ring-offset-0"
                     />
                     <span>Evitar detecciones consecutivas</span>
                   </label>
@@ -135,34 +145,34 @@ export const VideoAnalysis = () => {
         </CardContent>
       </Card>
 
-      <div className="grid md:grid-cols-3 gap-4">
-        <Card className="bg-white/80 border-blue-100">
-          <CardContent className="p-4 text-center">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <Brain className="h-6 w-6 text-blue-600" />
+      <div className="grid md:grid-cols-3 gap-6">
+        <Card className="bg-white/90 backdrop-blur-sm border-slate-200/50 shadow-xl rounded-2xl card-hover">
+          <CardContent className="p-6 text-center">
+            <div className="w-14 h-14 flockit-gradient rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <Brain className="h-7 w-7 text-white" />
             </div>
-            <h3 className="font-semibold text-gray-800 mb-1">Google Gemini Vision</h3>
-            <p className="text-sm text-gray-600">IA avanzada para reconocimiento visual personalizado</p>
+            <h3 className="font-bold text-slate-800 mb-2 text-lg">Google Gemini Vision</h3>
+            <p className="text-sm text-slate-600 leading-relaxed">IA avanzada para reconocimiento visual personalizado con alta precisión</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-white/80 border-green-100">
-          <CardContent className="p-4 text-center">
-            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <Zap className="h-6 w-6 text-green-600" />
+        <Card className="bg-white/90 backdrop-blur-sm border-slate-200/50 shadow-xl rounded-2xl card-hover">
+          <CardContent className="p-6 text-center">
+            <div className="w-14 h-14 flockit-orange-gradient rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <Zap className="h-7 w-7 text-white" />
             </div>
-            <h3 className="font-semibold text-gray-800 mb-1">Detección Personalizada</h3>
-            <p className="text-sm text-gray-600">Busca productos específicos usando tus imágenes de referencia</p>
+            <h3 className="font-bold text-slate-800 mb-2 text-lg">Detección Personalizada</h3>
+            <p className="text-sm text-slate-600 leading-relaxed">Busca productos específicos usando tus imágenes de referencia</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-white/80 border-purple-100">
-          <CardContent className="p-4 text-center">
-            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <Settings className="h-6 w-6 text-purple-600" />
+        <Card className="bg-white/90 backdrop-blur-sm border-slate-200/50 shadow-xl rounded-2xl card-hover">
+          <CardContent className="p-6 text-center">
+            <div className="w-14 h-14 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <Settings className="h-7 w-7 text-white" />
             </div>
-            <h3 className="font-semibold text-gray-800 mb-1">Configuración Avanzada</h3>
-            <p className="text-sm text-gray-600">Ajusta precisión y velocidad según tus necesidades</p>
+            <h3 className="font-bold text-slate-800 mb-2 text-lg">Configuración Avanzada</h3>
+            <p className="text-sm text-slate-600 leading-relaxed">Ajusta precisión y velocidad según tus necesidades específicas</p>
           </CardContent>
         </Card>
       </div>
