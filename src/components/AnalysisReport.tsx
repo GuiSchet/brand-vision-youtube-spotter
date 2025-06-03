@@ -232,7 +232,7 @@ export const AnalysisReport = ({ results }: AnalysisReportProps) => {
             <ul className="space-y-1 text-sm text-gray-700 ml-4">
               <li>• {results.products[0]?.name} tuvo la mayor exposición con {results.products[0]?.detections} apariciones</li>
               <li>• El video tiene una buena distribución de productos a lo largo de su duración</li>
-              <li>• La confianza promedio de detección es alta (>85%)</li>
+              <li>• La confianza promedio de detección es alta ({'>'}85%)</li>
             </ul>
           </div>
           <div className="space-y-2">
